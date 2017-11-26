@@ -1,3 +1,23 @@
+import pickle
+import matplotlib.pyplot as plt
+import numpy as np
+from collections import defaultdict
+import pandas as pd
+import matplotlib.pyplot as plt
+import csv
+import theano, numpy
+import theano.tensor as T
+import time
+import sys
+from collections import defaultdict
+from sklearn.metrics import jaccard_similarity_score
+from sklearn.metrics.pairwise import cosine_similarity
+import theano, numpy
+import theano.tensor as T
+import time
+import sys
+from collections import defaultdict
+
 def check_tuple(tuple_1, tuple_2, user_bundle_map):
     return tuple_1[1] not in user_bundle_map[tuple_2[0]] and tuple_2[1] not in user_bundle_map[tuple_1[0]]
 
@@ -42,7 +62,7 @@ def get_test_data_items(test_data, train_data):
     test_dict, test_users, test_items = data_to_dict(test_data)
     z = 0
     for i,user in enumerate(test_dict.keys()):
-        if(i%1000==0):
+        if(i%100000==0):
             print i
 
         if user in train_users: 

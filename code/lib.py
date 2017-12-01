@@ -61,6 +61,7 @@ def get_test_data_items(test_data, train_data):
     train_dict, train_users, train_items  = data_to_dict(train_data)
     test_dict, test_users, test_items = data_to_dict(test_data)
     z = 0
+    count = -1
     for i,user in enumerate(test_dict.keys()):
         if(i%100000==0):
             print i
@@ -70,6 +71,9 @@ def get_test_data_items(test_data, train_data):
                 if pos_item in train_items:
                     for neg_item in train_items:
                         if neg_item not in test_dict[user] and neg_item not in train_dict[user]:
+                            count += 1
+                            if count % 15 != 0:
+                                continue
                             users.append(user)
                             pos_items.append(pos_item)
                             neg_items.append(neg_item)

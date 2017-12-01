@@ -315,7 +315,7 @@ def get_test_data_bundles(test_data, train_data, n_items):
 
 class BPR_Cold(object):
 
-    def __init__(self, rank, bundle_size, n_users, n_items, lambda_u = 0.0025, lambda_i = 0.0025, lambda_j = 0.00025, lambda_d = 0.0025, lambda_p = 0.00025, lambda_bias = 0.0, learning_rate = 0.05):
+    def __init__(self, rank, bundle_size, n_users, n_items, W_item, H_item, B_item, lambda_u = 0.0025, lambda_i = 0.0025, lambda_j = 0.00025, lambda_d = 0.0025, lambda_p = 0.00025, lambda_bias = 0.0, learning_rate = 0.05):
         
         self._rank = rank
         self._bundle_rank = bundle_size + 1
@@ -326,6 +326,9 @@ class BPR_Cold(object):
         self._lambda_j = lambda_j
         self._lambda_d = lambda_d
         self._lambda_p = lambda_p
+        self.W1 = W_item
+        self.H1 = theano.shared(H_item.astype('float32'), name='H')
+        self.B1 = theano.shared(B_item.astype('float32'), name='B')
         self._lambda_bias = lambda_bias
         self._learning_rate = learning_rate
         self._configure_theano()
@@ -344,10 +347,6 @@ class BPR_Cold(object):
         n2 = T.lvector('n2')
         di = T.dvector('di')
         dj = T.dvector('dj')
-        
-        self.W1 = bpr_item.W
-        self.H1 = theano.shared(H_item.astype('float32'), name='H')
-        self.B1 = theano.shared(B_item.astype('float32'), name='B')
         
         
         self.M1 = theano.shared(numpy.random.random((self._rank, self._rank)).astype('float64'), name='M1')
@@ -456,7 +455,8 @@ class BPR_Cold(object):
         sys.stderr.write("\n")
         sys.stderr.flush()
         return numpy.mean(auc_values)
-
+    
+    
 def generate_bundle(items_set, user, initial_size = 3, max_iteration = 1000, sample_size = 5):
     current_bundle = np.random.choice(list(items_set), initial_size)
     

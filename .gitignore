@@ -1,2 +1,4 @@
 data/processed_data/user_items_matrix
 data/new_data/bpr_item.pkl
+data/new_data/
+data/train_test/

@@ -262,14 +262,14 @@ def compute_diversity_tags(app_data):
     else:
         return 0.0
 
-def compute_diversity_latent(app_data, H):
-    l=len(app_data)
+def compute_diversity_latent(items, H):
     count=0.0
     similarity=0.0
-    for i in range(l):
-            for j in range(i+1,l):
+    for i in range(len(items)):
+            for j in range(i+1,len(items)):
+                    itemID1, itemID2 = items[i], items[j]
                     count+=1
-                    similarity+=cosine_similarity(H[i],H[j])[0,0]
+                    similarity+=cosine_similarity(H[itemID1].reshape(1,-1),H[itemID2].reshape(1,-1))[0,0]
     if count>0:
         return 1-(similarity/count)
     else:
